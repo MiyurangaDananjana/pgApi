@@ -42,6 +42,11 @@ namespace PsSQL.Controllers
         {
             var products = _DbContext.Products.ToList();
 
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found");
+            }
+
             return Ok(products);
         }
 
