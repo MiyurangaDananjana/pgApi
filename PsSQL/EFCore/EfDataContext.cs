@@ -13,6 +13,8 @@ namespace PsSQL.EFCore
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<UserLogin> Users { get; set; }
     }
 
 
