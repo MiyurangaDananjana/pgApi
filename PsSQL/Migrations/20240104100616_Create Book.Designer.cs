@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PsSQL.EFCore;
@@ -11,9 +12,10 @@ using PsSQL.EFCore;
 namespace PsSQL.Migrations
 {
     [DbContext(typeof(EfDataContext))]
-    partial class EfDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240104100616_Create Book")]
+    partial class CreateBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,46 +65,6 @@ namespace PsSQL.Migrations
                     b.HasKey("BookId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("PsSQL.Models.Entities.BooksData", b =>
-                {
-                    b.Property<string>("BookId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Authors")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AverageRating")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Categories")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NumPages")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PublishedYear")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RatingsCount")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subtitle")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Thumbnail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.HasKey("BookId");
-
-                    b.ToTable("BooksDatas");
                 });
 
             modelBuilder.Entity("PsSQL.Models.Entities.Order", b =>

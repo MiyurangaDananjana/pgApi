@@ -17,16 +17,22 @@ namespace PsSQL.Controllers
         }
 
         [HttpPost("new-user")]
-        public IActionResult NewUser(UserModel userLogin)
+        public IActionResult NewUser(NewUserModel newUserModel)
         {
             try
             {
+                string newSessionId = GenerateSessionId();
+                DateTime dateTimeNow = DateTime.UtcNow;
+
                 // Map UserModel to UserLogin (assuming properties match)
                 var user = new UserLogin
                 {
-                    UserName = userLogin.UserName,
-                    UserPassword = userLogin.UserPassword,
-                    CenterId = userLogin.CenterId
+                    UserName = newUserModel.UserName,
+                    UserPassword = newUserModel.Password,
+                    CenterId = newUserModel.CenterId,
+                    LastLogin = dateTimeNow,
+                    SessionId = newSessionId,
+                    SessionCreateDateTime = dateTimeNow,
                 };
 
                 // Add the userLogin object to the DbSet
@@ -44,17 +50,41 @@ namespace PsSQL.Controllers
             }
         }
 
+        public string GenerateSessionId()
+        {
+            // Generate a unique session ID using Guid
+            Guid sessionId = Guid.NewGuid();
+            return sessionId.ToString();
+        }
+
         [HttpPost("user-login")]
         public IActionResult UserLogin([FromBody] UserModel userModel)
         {
-            var isUserValid = _dbContext.Users.FirstOrDefault(x => x.UserName == userModel.UserName && x.UserPassword == userModel.UserPassword);
+            var isUserValid = _dbContext.Users.FirstOrDefault(x => x.UserName == userModel.UserName && x.UserPassword == userModel.UserPassword && x.UserStatus == 0);
 
-            if(isUserValid != null)
+            if (isUserValid != null)
             {
-                return Ok(isUserValid.Id);
+                isUserValid.LastLogin = DateTime.UtcNow;
+                // Save changes to the database
+                _dbContext.SaveChanges();
+
+                return Ok(isUserValid.SessionId);
             }
             return Ok("IsUserNotValid");
-            
+
+        }
+
+        [HttpGet("Get-User-Data")]
+        public IActionResult GetUserData(string sessionId)
+        {
+           
+            if (sessionId != null)
+            {
+                var userData = _dbContext.Users.FirstOrDefault(x => x.SessionId == null);
+                return Ok(userData);
+            }
+
+            return BadRequest();
         }
     }
 }

@@ -14,8 +14,16 @@ namespace PsSQL.Models.Entities
 
         public string? UserPassword { get; set; }
 
+        public int UserStatus { get; set; }
+
         public int CenterId { get; set; }
 
-     
+        public DateTime LastLogin { get; set; }
+
+        public DateTime SessionCreateDateTime { get; set; }
+
+        public string? SessionId { get; set; }
+
+
     }
 }
