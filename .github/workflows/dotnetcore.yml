@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build and Release
 
 on:
   push:
@@ -24,5 +24,18 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
-    - name: Test
-      run: dotnet test
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./pgApi/bin/Release/net6.0/publish/
+        token: ${{ secrets.GITHUB_TOKEN }}
+        release_name: Release ${{ github.run_number }}
+        body: |
+          Changes in this release:
+          - Describe your changes here
