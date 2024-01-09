@@ -31,19 +31,11 @@ jobs:
     steps:
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ github.run_number }}
+        files: ./pgApi/bin/Release/net6.0/publish/
+        token: ${{ secrets.GITHUB_TOKEN }}
         release_name: Release ${{ github.run_number }}
         body: |
           Changes in this release:
           - Describe your changes here
-
-    - name: Upload Artifact
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./path/to/your/app.zip
-        asset_name: app.zip
-        asset_content_type: application/zip
