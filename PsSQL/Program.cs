@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using PsSQL.EFCore;
+using PsSQL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,14 @@ builder.Services.AddControllers(options =>
 builder.Services.AddDbContext<EfDataContext>(
     option=>option.UseNpgsql(builder.Configuration.GetConnectionString("EfPostgresDb")));
 
+builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);
+
+builder.Services.AddScoped<JsonDataService>(_ => new JsonDataService(builder.Environment, "App_Data"));
+
 
 builder.Services.AddControllers();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

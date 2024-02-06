@@ -62,6 +62,12 @@ namespace PsSQL.Controllers
 
             return Ok(product);
         }
+
+        [HttpGet("TestProduct")]
+        public IActionResult TestProduct()
+        {
+            return Ok("Hello World");
+        }
     }
 
 
